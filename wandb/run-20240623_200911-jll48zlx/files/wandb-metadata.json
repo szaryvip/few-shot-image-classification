@@ -1,0 +1,40 @@
+{
+  "os": "Linux-6.5.0-35-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12",
+  "startedAt": "2024-06-23T18:09:11.543356Z",
+  "program": "/home/szaryvip/MGR/few-shot-image-classification/src/train.py",
+  "codePath": "src/train.py",
+  "git": {
+    "remote": "https://github.com/szaryvip/few-shot-image-classification.git",
+    "commit": "03a458617d5d3971f234f517f381c13e5b0f0c99"
+  },
+  "email": "lukasz.szarejko.stud@pw.edu.pl",
+  "root": "/home/szaryvip/MGR/few-shot-image-classification",
+  "host": "szaryvipPC",
+  "username": "szaryvip",
+  "executable": "/usr/bin/python",
+  "codePathLocal": "src/train.py",
+  "cpu_count": 6,
+  "cpu_count_logical": 12,
+  "gpu": "[NVIDIA GeForce GTX 1660 Ti]",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "84140179456",
+      "used": "67576406016"
+    }
+  },
+  "memory": {
+    "total": "16587440128"
+  },
+  "cpu": {
+    "count": 6,
+    "countLogical": 12
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA GeForce GTX 1660 Ti",
+      "memoryTotal": "6442450944"
+    }
+  ]
+}

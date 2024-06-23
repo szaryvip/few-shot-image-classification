@@ -1,0 +1,3 @@
+wandb:
+  project-name: "few-shot-learning"
+  password: !ENV "${PASS}"

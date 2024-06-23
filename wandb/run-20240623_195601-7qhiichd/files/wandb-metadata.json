@@ -1,0 +1,108 @@
+{
+    "os": "Linux-6.5.0-35-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "heartbeatAt": "2024-06-23T17:56:02.393820",
+    "startedAt": "2024-06-23T17:56:01.586775",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/szaryvip/MGR/few-shot-image-classification/src/train.py",
+    "codePathLocal": "src/train.py",
+    "codePath": "src/train.py",
+    "git": {
+        "remote": "https://github.com/szaryvip/few-shot-image-classification.git",
+        "commit": "03a458617d5d3971f234f517f381c13e5b0f0c99"
+    },
+    "email": "lukaszszarejko@wp.pl",
+    "root": "/home/szaryvip/MGR/few-shot-image-classification",
+    "host": "szaryvipPC",
+    "username": "szaryvip",
+    "executable": "/usr/bin/python",
+    "cpu_count": 6,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 1314.7483333333332,
+        "min": 800.0,
+        "max": 4500.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 1001.618,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 1002.963,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 969.971,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 951.354,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 944.03,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 1119.69,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 2656.2,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 907.407,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 1262.061,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 929.441,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 3871.295,
+            "min": 800.0,
+            "max": 4500.0
+        },
+        {
+            "current": 1002.355,
+            "min": 800.0,
+            "max": 4500.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 78.36164855957031,
+            "used": 62.798580169677734
+        }
+    },
+    "gpu": "NVIDIA GeForce GTX 1660 Ti",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce GTX 1660 Ti",
+            "memory_total": 6442450944
+        }
+    ],
+    "memory": {
+        "total": 15.448257446289062
+    }
+}
