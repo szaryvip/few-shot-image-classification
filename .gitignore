@@ -1,4 +1,8 @@
 wandb/
+src/datasets/mini-imagenet/
+src/datasets/cub200/
+src/datasets/fc100/
+src/datasets/tiered-imagenet/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
