@@ -10,6 +10,7 @@ from models.TransformerEncoder import get_encoder
 
 
 class CAML(nn.Module):
+
     def __init__(self,
                  feature_extractor,
                  fe_dim,
