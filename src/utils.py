@@ -21,7 +21,7 @@ def get_accuracy_from_logits(logits, labels):
     """Compute the accuracy given the logits and the labels."""
     preds = torch.argmax(logits, dim=1)
     acc = (preds == labels).float().mean().item()*100
-    return round(acc, 3)
+    return acc
 
 
 def count_learnable_params(model):
