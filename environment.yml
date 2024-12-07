@@ -4,8 +4,6 @@ wandb:
 
 model:
   feature_extractor: "timm/vit_base_patch32_clip_224.laion2b_ft_in1k"
-  feature_extractor_dim: 224
   name: "CAML"
-  encoder_size: 512
-  fe_dtype: "float32"
+  encoder_size: "tiny"
   lr: 0.0001
