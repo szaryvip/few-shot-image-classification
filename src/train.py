@@ -4,7 +4,7 @@ from models.CAML import CAML
 from utils import divide_into_query_and_support, get_accuracy_from_logits
 
 
-def train_epoch(model, dataloader, optimizer, criterion, device, way, shot):
+def train_epoch(model, dataloader, optimizer, scheduler, criterion, device, way, shot):
     model.train()
     avg_loss = 0.0
     avg_acc = 0.0
@@ -25,6 +25,7 @@ def train_epoch(model, dataloader, optimizer, criterion, device, way, shot):
         loss = criterion(logits, queryY)
         loss.backward()
         optimizer.step()
+        scheduler.step()
         loss_value = loss.item()
 
         acc = get_accuracy_from_logits(logits, queryY)
