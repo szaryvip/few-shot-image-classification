@@ -1,9 +1,0 @@
-wandb:
-  project-name: "few-shot-learning"
-  password: !ENV "${PASS}"
-
-model:
-  feature_extractor: "timm/vit_base_patch32_clip_224.laion2b_ft_in1k"
-  name: "CAML"
-  encoder_size: "tiny"
-  lr: 0.0001
