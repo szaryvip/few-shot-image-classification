@@ -9,7 +9,9 @@ from datasets.consts import Dataset, DatasetType
 from datasets.download_data import download_data
 from datasets.get_data_loader import get_data_loader
 from evaluate import eval_func
+from models.CAML import CAML
 from models.feature_extractor import get_pretrained_model, get_transform
+from models.get_model import get_model
 from scheduler import WarmupCosineDecayScheduler
 from train import train_epoch
 from utils import count_learnable_params, count_non_learnable_params
@@ -122,7 +124,7 @@ def main():
     print("Preparing the model...")
     criterion = torch.nn.CrossEntropyLoss()
 
-    # TODO prepare model
+    model = get_model(type=args.model, fe_extractor=feature_extractor, encoder_size=args.encoder_size, device=device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
 
@@ -132,7 +134,8 @@ def main():
     print(f"Non-learnable parameters: {non_learnable_params}")
 
     if args.use_wandb:
-        wandb.init(project=args.wandb_project, config={})  # TODO config
+        wandb.init(project=args.wandb_project, config={
+                   "Architecture": args.model, "Dataset": args.dataset, "Way": args.way, "Shot": args.shot})
 
     print("Training the model...")
     if args.epochs > 0:
