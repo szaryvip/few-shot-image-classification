@@ -11,5 +11,5 @@ def get_data_loader(dataset, way, shot, num_tasks, shuffle):
     ]
 
     task_dataset = l2l.data.TaskDataset(dataset, task_transforms=task_transforms, num_tasks=num_tasks)
-    task_dataloader = torch.utils.data.DataLoader(task_dataset, shuffle=shuffle)
+    task_dataloader = torch.utils.data.DataLoader(task_dataset, shuffle=shuffle, pin_memory=True)
     return task_dataloader

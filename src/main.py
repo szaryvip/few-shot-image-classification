@@ -174,7 +174,7 @@ def main():
             if avg_acc >= best_val_acc:
                 torch.save(model.state_dict(), "best_model.pth")
 
-        model.load_state_dict(torch.load("best_model.pth"), weights_only=True)
+        model.load_state_dict(torch.load("best_model.pth", weights_only=True))
 
     print("Evaluating the model...")
     eval_start = time.time()
