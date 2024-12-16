@@ -65,6 +65,13 @@ def main():
     )
 
     parser.add_argument(
+        "--fe_dim",
+        type=int,
+        default=384,
+        help="Specify the feature extractor dimension. Default: 384 because of 'timm/vit_small_patch16_224.dino' as feature extractor."
+    )
+
+    parser.add_argument(
         "--epochs",
         type=int,
         default=10,
@@ -124,7 +131,8 @@ def main():
     print("Preparing the model...")
     criterion = torch.nn.CrossEntropyLoss()
 
-    model = get_model(type=args.model, fe_extractor=feature_extractor, encoder_size=args.encoder_size, device=device)
+    model = get_model(type=args.model, fe_extractor=feature_extractor,
+                      fe_dim=args.fe_dim, encoder_size=args.encoder_size, device=device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
 
