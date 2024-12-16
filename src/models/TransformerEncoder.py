@@ -191,14 +191,18 @@ class TransformerEncoder(nn.Module):
         self.device = device
         self.num_classes = num_classes
 
+        # Own code
+        elmes_len = self.hidden_dim - self.image_dim
+
         self.feature_proj = torch.nn.Identity()
-        self.unk_emb = torch.nn.Parameter(torch.zeros(1, 1, 256))
+        self.unk_emb = torch.nn.Parameter(torch.zeros(1, 1, elmes_len))
         self.elmes_scale = torch.nn.Parameter(torch.ones(1))
         # Change to a non-trainable Parameter so this loads from model weights (in case random changes).
         if label_elmes:
-            self.label_elmes = torch.nn.Parameter(get_elmes(256, num_classes, device), requires_grad=False)
+            self.label_elmes = torch.nn.Parameter(get_elmes(elmes_len, num_classes, device), requires_grad=False)
         else:
-            self.label_elmes = torch.nn.Parameter(torch.empty(num_classes, 256, device=device), requires_grad=True)
+            self.label_elmes = torch.nn.Parameter(torch.empty(
+                num_classes, elmes_len, device=device), requires_grad=True)
             torch.nn.init.kaiming_uniform_(self.label_elmes, a=math.sqrt(5))
 
         self.output_proj = torch.nn.Linear(in_features=hidden_dim, out_features=num_classes, bias=False)
@@ -278,6 +282,7 @@ class TransformerEncoder(nn.Module):
 
 class Encoder(nn.Module):
     """Transformer Model Encoder for sequence to sequence translation."""
+
     def __init__(
             self,
             num_layers: int,
@@ -323,6 +328,7 @@ class Encoder(nn.Module):
 
 class EncoderBlock(nn.Module):
     """Transformer encoder block."""
+
     def __init__(
             self,
             num_heads: int,

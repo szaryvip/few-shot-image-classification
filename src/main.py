@@ -143,7 +143,9 @@ def main():
 
     if args.use_wandb:
         wandb.init(project=args.wandb_project, config={
-                   "Architecture": args.model, "Dataset": args.dataset, "Way": args.way, "Shot": args.shot})
+                   "Architecture": args.model, "Feature-Extractor": args.feature_extractor,
+                   "Dataset": args.dataset, "Way": args.way, "Shot": args.shot
+                   })
 
     print("Training the model...")
     if args.epochs > 0:
