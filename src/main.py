@@ -10,6 +10,7 @@ from datasets.download_data import download_data
 from datasets.get_data_loader import get_data_loader
 from evaluate import eval_func
 from models.CAML import CAML
+from models.consts import ModelType
 from models.feature_extractor import get_pretrained_model, get_transform
 from models.get_model import get_model
 from scheduler import WarmupCosineDecayScheduler
@@ -110,29 +111,27 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if args.disable_cuda:
         device = torch.device("cpu")
+    print("Using device: ", device)
 
     print("Downloading and loading the feature extractor...")
     feature_extractor = get_pretrained_model(args.feature_extractor)
     train_transform, test_transform = get_transform(args.feature_extractor)
 
     print("Downloading and loading the dataset...")
-    if args.dataset not in Dataset.__members__:
-        raise ValueError(f"Invalid dataset: {args.dataset}")
-
-    train = download_data(args.dataset, DatasetType.TRAIN, transform=train_transform)
-    valid = download_data(args.dataset, DatasetType.VAL, transform=test_transform)
-    test = download_data(args.dataset, DatasetType.TEST, transform=test_transform)
+    train = download_data(Dataset(args.dataset), DatasetType.TRAIN, transform=train_transform)
+    valid = download_data(Dataset(args.dataset), DatasetType.VAL, transform=test_transform)
+    test = download_data(Dataset(args.dataset), DatasetType.TEST, transform=test_transform)
 
     print("Preparing DataLoader...")
     train_loader = get_data_loader(train, args.way, args.shot, args.number_of_tasks, True)
-    valid_loader = get_data_loader(valid, args.way, args.shot, args.number_of_tasks, True)
-    test_loader = get_data_loader(test, args.way, args.shot, args.number_of_tasks, True)
+    valid_loader = get_data_loader(valid, args.way, args.shot, args.number_of_tasks, False)
+    test_loader = get_data_loader(test, args.way, args.shot, args.number_of_tasks, False)
 
     print("Preparing the model...")
     criterion = torch.nn.CrossEntropyLoss()
 
-    model = get_model(type=args.model, fe_extractor=feature_extractor,
-                      fe_dim=args.fe_dim, encoder_size=args.encoder_size, device=device)
+    model = get_model(type=ModelType(args.model), fe_extractor=feature_extractor,
+                      fe_dim=args.fe_dim, encoder_size=args.encoder_size, device=device).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
 
@@ -144,7 +143,8 @@ def main():
     if args.use_wandb:
         wandb.init(project=args.wandb_project, config={
                    "Architecture": args.model, "Feature-Extractor": args.feature_extractor,
-                   "Dataset": args.dataset, "Way": args.way, "Shot": args.shot
+                   "Dataset": args.dataset, "Way": args.way, "Shot": args.shot,
+                   "Learnable-Parameters": learnable_params, "Non-Learnable-Parameters": non_learnable_params
                    })
 
     print("Training the model...")
@@ -152,7 +152,7 @@ def main():
         lr_min = 1e-6
         scheduler = WarmupCosineDecayScheduler(optimizer, args.epochs//10, args.epochs, lr_min)
         best_val_acc = 0
-        for epoch in tqdm.tqdm(range(args.epochs)):
+        for epoch in tqdm(range(args.epochs)):
             epoch_start = time.time()
             avg_loss, avg_acc = train_epoch(model, train_loader, optimizer, scheduler,
                                             criterion, device, args.way, args.shot)
