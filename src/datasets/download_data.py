@@ -29,6 +29,26 @@ def download_data(dataset_name: Dataset,
                               download=True,
                               mode=dataset_type.value,
                               transform=transform)
+    elif dataset_name == Dataset.VGGFLOWER102:
+        return l2l.VGGFlower102(DatasetPath.VGGFLOWER102.value,
+                                download=True,
+                                mode=dataset_type.value,
+                                transform=transform)
+    elif dataset_name == Dataset.FGVC_AIRCRAFT:
+        return l2l.FGVCAircraft(DatasetPath.FGVC_AIRCRAFT.value,
+                                download=True,
+                                mode=dataset_type.value,
+                                transform=transform)
+    elif dataset_name == Dataset.FGVC_FUNGI:
+        return l2l.FGVCFungi(DatasetPath.FGVC_FUNGI.value,
+                             download=True,
+                             mode=dataset_type.value,
+                             transform=transform)
+    elif dataset_name == Dataset.DESC_TEXTURES:
+        return l2l.DescribableTextures(DatasetPath.DESC_TEXTURES.value,
+                                       download=True,
+                                       mode=dataset_type.value,
+                                       transform=transform)
     else:
         raise ValueError('Unknown dataset: {}'.format(dataset_name))
 

@@ -3,6 +3,10 @@ src/datasets/mini-imagenet/
 src/datasets/cub200/
 src/datasets/fc100/
 src/datasets/tiered-imagenet/
+src/datasets/vggflower102
+src/datasets/fgvc-aircraft
+src/datasets/fgvc-fungi
+src/datasets/describable-textures
 *.pth
 caml_pretrained_models/
 
