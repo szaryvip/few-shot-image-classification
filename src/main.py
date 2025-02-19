@@ -184,6 +184,8 @@ def main():
     avg_loss, avg_acc = eval_func(model, test_loader, criterion, device, args.way, args.shot)
     eval_time = time.time() - eval_start
     print(f"Test - Loss: {avg_loss}, Acc: {avg_acc}, Time: {eval_time}")
+    if args.use_wandb:
+        wandb.log({"test_acc": avg_acc, "test_loss": avg_loss, "eval_time": eval_time})
 
     if args.use_wandb:
         wandb.finish()
