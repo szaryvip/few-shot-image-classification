@@ -16,7 +16,7 @@ def get_model(type: ModelType, fe_extractor, fe_dim=768, fe_dtype=torch.float32,
     elif type == ModelType.PMF_FT:
         model = ProtoNet_Finetune(backbone=fe_extractor, **kwargs)
     elif type == ModelType.BASELINE:
-        model = Baseline(feature_extractor=fe_extractor, extractor_dim=fe_dim)
+        model = Baseline(feature_extractor=fe_extractor)
     else:
         raise ValueError(f"Model type {type} not recognized.")
     return model

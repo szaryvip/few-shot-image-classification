@@ -119,22 +119,24 @@ def main():
     train_transform, test_transform = get_transform(args.feature_extractor)
 
     print("Downloading and loading the dataset...")
-    train = download_data(Dataset(args.dataset), DatasetType.TRAIN, transform=train_transform)
-    valid = download_data(Dataset(args.dataset), DatasetType.VAL, transform=test_transform)
+    if args.epochs > 0:
+        train = download_data(Dataset(args.dataset), DatasetType.TRAIN, transform=train_transform)
+        valid = download_data(Dataset(args.dataset), DatasetType.VAL, transform=test_transform)
     test = download_data(Dataset(args.dataset), DatasetType.TEST, transform=test_transform)
 
     print("Preparing DataLoader...")
-    train_loader = get_data_loader(train, args.way, args.shot, args.number_of_tasks, True)
-    valid_loader = get_data_loader(valid, args.way, args.shot, args.number_of_tasks, False)
+    if args.epochs > 0:
+        train_loader = get_data_loader(train, args.way, args.shot, args.number_of_tasks, True)
+        valid_loader = get_data_loader(valid, args.way, args.shot, args.number_of_tasks, False)
     test_loader = get_data_loader(test, args.way, args.shot, args.number_of_tasks, False)
 
     print("Preparing the model...")
     criterion = torch.nn.CrossEntropyLoss()
-
     model = get_model(type=ModelType(args.model), fe_extractor=feature_extractor,
                       fe_dim=args.fe_dim, encoder_size=args.encoder_size, device=device).to(device)
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
+    if args.epochs > 0:
+        optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
 
     learnable_params = count_learnable_params(model)
     non_learnable_params = count_non_learnable_params(model)
@@ -181,7 +183,7 @@ def main():
     eval_start = time.time()
     avg_loss, avg_acc = eval_func(model, test_loader, criterion, device, args.way, args.shot)
     eval_time = time.time() - eval_start
-    print(f"Validation - Loss: {avg_loss}, Acc: {avg_acc}, Time: {eval_time}")
+    print(f"Test - Loss: {avg_loss}, Acc: {avg_acc}, Time: {eval_time}")
 
     if args.use_wandb:
         wandb.finish()

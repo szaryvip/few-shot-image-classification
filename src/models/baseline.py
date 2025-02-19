@@ -5,8 +5,9 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import accuracy_score
 
 
-class Baseline:
+class Baseline(torch.nn.Module):
     def __init__(self, feature_extractor, extractor_dim=224, extractor_channels=3):
+        super().__init__()
         self.feature_extractor = feature_extractor
         for p in self.feature_extractor.parameters():
             p.requires_grad = False
