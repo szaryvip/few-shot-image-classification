@@ -4,7 +4,7 @@ Master Thesis (WUT) experiments on few-shot learning for image classification pr
 
 Current work includes reproducing selected articles and benchmark them on popular few-shot classification datasets.
 
-All python scripts should be run from src directory directly.
+All python and shell scripts should be run from src directory directly.
 
 Selected articles:
 

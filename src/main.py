@@ -25,16 +25,17 @@ def main():
         "--model",
         type=str,
         required=True,
-        choices=["CAML", "PMF", "PMF_Finetune"],
-        help="Specify the model type for experiment. Options: ['CAML', 'PMF', 'PMF_Finetune']"
+        choices=["CAML", "PMF", "PMF_Finetune", "Baseline"],
+        help="Specify the model type for experiment. Options: ['CAML', 'PMF', 'PMF_Finetune', 'Baseline']"
     )
 
     parser.add_argument(
         "--dataset",
         type=str,
         required=True,
-        choices=["mini-imagenet", "tiered-imagenet"],
-        help="Specify the dataset for experiment. Options: ['mini-imagenet', 'tiered-imagenet']"
+        choices=["fc100", "mini-imagenet", "tiered-imagenet", "cub200",
+                 "vggflower102", "fgvc-aircraft", "describable-textures"],
+        help="Specify the dataset for experiment. Options: ['fc100', 'mini-imagenet', 'tiered-imagenet', 'cub200', 'vggflower102', 'fgvc-aircraft', 'describable-textures']"
     )
 
     parser.add_argument(
@@ -61,15 +62,15 @@ def main():
     parser.add_argument(
         "--feature_extractor",
         type=str,
-        default="timm/vit_small_patch16_224.dino",
-        help="Specify the feature extractor for the model. Default: 'timm/vit_small_patch16_224.dino'"
+        default="timm/vit_base_patch16_clip_224.openai",
+        help="Specify the feature extractor for the model. Default: 'vit_base_patch16_clip_224.openai'"
     )
 
     parser.add_argument(
         "--fe_dim",
         type=int,
-        default=384,
-        help="Specify the feature extractor dimension. Default: 384 because of 'timm/vit_small_patch16_224.dino' as feature extractor."
+        default=768,
+        help="Specify the feature extractor dimension. Default: 768 because of 'vit_base_patch16_clip_224.openai' as feature extractor."
     )
 
     parser.add_argument(
