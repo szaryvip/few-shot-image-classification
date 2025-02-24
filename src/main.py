@@ -107,6 +107,13 @@ def main():
         help="Disable CUDA."
     )
 
+    parser.add_argument(
+        "--learning_rate",
+        type=float,
+        default=1e-5,
+        help="Specify the learning rate for the optimizer. Default 1e-5"
+    )
+
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -116,7 +123,8 @@ def main():
 
     print("Downloading and loading the feature extractor...")
     feature_extractor = get_pretrained_model(args.feature_extractor)
-    train_transform, test_transform = get_transform(args.feature_extractor)
+    train_transform, test_transform = get_transform(
+        args.feature_extractor, True if Dataset(args.dataset) == Dataset.MINI_IMAGENET else False)
 
     print("Downloading and loading the dataset...")
     if args.epochs > 0:
@@ -136,7 +144,7 @@ def main():
                       fe_dim=args.fe_dim, encoder_size=args.encoder_size, device=device).to(device)
 
     if args.epochs > 0:
-        optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 
     learnable_params = count_learnable_params(model)
     non_learnable_params = count_non_learnable_params(model)
@@ -144,10 +152,13 @@ def main():
     print(f"Non-learnable parameters: {non_learnable_params}")
 
     if args.use_wandb:
+        print(args.model)
+        print(args.dataset)
         wandb.init(project=args.wandb_project, config={
-                   "Architecture": args.model, "Feature-Extractor": args.feature_extractor,
-                   "Dataset": args.dataset, "Way": args.way, "Shot": args.shot,
-                   "Learnable-Parameters": learnable_params, "Non-Learnable-Parameters": non_learnable_params
+                   "architecture": args.model, "Feature-Extractor": args.feature_extractor,
+                   "dataset": args.dataset, "Way": args.way, "Shot": args.shot,
+                   "Learnable-Parameters": learnable_params, "Non-Learnable-Parameters": non_learnable_params,
+                   "epochs": args.epochs, "learning_rate": args.learning_rate
                    })
 
     print("Training the model...")
