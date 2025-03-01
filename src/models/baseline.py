@@ -61,5 +61,5 @@ class Baseline(torch.nn.Module):
         mapped_preds = np.array([cluster_mapping[p] for p in predicted_groups])
 
         # Compute accuracy
-        accuracy = accuracy_score(true_labels, mapped_preds)
+        accuracy = accuracy_score(true_labels, mapped_preds)*100
         return accuracy

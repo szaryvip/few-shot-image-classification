@@ -30,6 +30,13 @@ def main():
     )
 
     parser.add_argument(
+        "--pretrained_path",
+        required=False,
+        type=str,
+        help="Specify the path to the pretrained model."
+    )
+
+    parser.add_argument(
         "--dataset",
         type=str,
         required=True,
@@ -142,6 +149,10 @@ def main():
     criterion = torch.nn.CrossEntropyLoss()
     model = get_model(type=ModelType(args.model), fe_extractor=feature_extractor,
                       fe_dim=args.fe_dim, encoder_size=args.encoder_size, device=device).to(device)
+
+    print("Loading the pretrained model...")
+    if args.pretrained_path:
+        model.load_state_dict(torch.load(args.pretrained_path, map_location=device), strict=False)
 
     if args.epochs > 0:
         optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
