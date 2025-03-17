@@ -131,7 +131,7 @@ def main():
     print("Downloading and loading the feature extractor...")
     feature_extractor = get_pretrained_model(args.feature_extractor)
     train_transform, test_transform = get_transform(
-        args.feature_extractor, True if Dataset(args.dataset) == Dataset.MINI_IMAGENET else False)
+        args.feature_extractor, True if Dataset(args.dataset) == Dataset.MINI_IMAGENET else False, model=feature_extractor.model)
 
     print("Downloading and loading the dataset...")
     if args.epochs > 0:
