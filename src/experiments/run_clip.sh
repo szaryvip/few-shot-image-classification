@@ -1,6 +1,6 @@
 #!/bin/sh
 # First argument is the model name
-# Example: ./experiments/run_clip.sh Baseline
+# Example: ./experiments/run_clip.sh BaselineKMeans
 
 fe='timm:vit_base_patch16_clip_224.openai'
 fe_dim=768

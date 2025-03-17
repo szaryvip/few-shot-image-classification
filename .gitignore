@@ -9,6 +9,7 @@ src/datasets/fgvc-fungi
 src/datasets/describable-textures
 *.pth
 caml_pretrained_models/
+images/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

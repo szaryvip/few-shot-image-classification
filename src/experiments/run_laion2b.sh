@@ -1,6 +1,6 @@
 #!/bin/sh
 # First argument is the model name
-# Example: ./experiments/run_laion2b.sh Baseline
+# Example: ./experiments/run_laion2b.sh BaselineKMeans
 
 fe='timm:vit_huge_patch14_clip_224.laion2b'
 fe_dim=1280

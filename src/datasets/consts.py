@@ -8,6 +8,8 @@ class DatasetType(Enum):
 
 
 class Dataset(Enum):
+    # ile klas w każdym?
+    # n-way -- ile n maksymalnie?
     FC100 = 'fc100'
     MINI_IMAGENET = 'mini-imagenet'
     TIERED_IMAGENET = 'tiered-imagenet'  # 12GB! LARGE AND LIKE MINI-IMAGENET

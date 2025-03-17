@@ -19,7 +19,7 @@ def eval_func(model, dataloader, criterion, device, way, shot):
 
             if isinstance(model, Baseline):
                 supp_groups, query_groups, supp_features, query_features = model.get_groups_and_features(
-                    suppX, queryX, way)
+                    suppX, suppY, queryX, way)
                 acc = model.calculate_accuracy(query_groups, queryY.cpu())
                 loss_value = 0
             else:

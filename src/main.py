@@ -25,8 +25,8 @@ def main():
         "--model",
         type=str,
         required=True,
-        choices=["CAML", "PMF", "PMF_Finetune", "Baseline"],
-        help="Specify the model type for experiment. Options: ['CAML', 'PMF', 'PMF_Finetune', 'Baseline']"
+        choices=["CAML", "PMF", "PMF_Finetune", "BaselineKMeans", "BaselineKNN"],
+        help="Specify the model type for experiment. Options: ['CAML', 'PMF', 'PMF_Finetune', 'BaselineKMeans', 'BaselineKNN']"
     )
 
     parser.add_argument(
