@@ -16,13 +16,13 @@ class Baseline(torch.nn.Module):
 
         dummy_input = torch.randn(1, extractor_channels, extractor_dim, extractor_dim).to("cuda")
         with torch.no_grad():
-            dummy_feature_map = self.feature_extractor(dummy_input)[0]
+            dummy_feature_map = self.feature_extractor(dummy_input)
         self.fe_dim = dummy_feature_map.flatten(start_dim=1).shape[1]
 
     def _get_feature_vector(self, inp):
         batch_size, num_images, c, h, w = inp.shape
         inp = inp.view(batch_size * num_images, c, h, w)
-        feature_map = self.feature_extractor(inp)[0]
+        feature_map = self.feature_extractor(inp)
         feature_vector = feature_map.view(batch_size, num_images, self.fe_dim)
         return feature_vector
 
