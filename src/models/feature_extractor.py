@@ -2,7 +2,25 @@ from typing import Any
 
 import timm
 import torchvision
+from torch import nn
 from transformers import AutoConfig, AutoModel
+
+
+class MambaVisionWrapper(nn.Module):
+    def __init__(self, model_name='nvidia/MambaVision-B-1K'):
+        super().__init__()
+        self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True).cuda().eval()
+
+    def forward(self, inputs):
+        out_avg_pool, _ = self.model(inputs)
+        return out_avg_pool
+
+    def parameters(self, recurse: bool = True):
+        return self.model.parameters(recurse)
+
+    def to(self, *args, **kwargs):
+        self.model.to(*args, **kwargs)
+        return self
 
 
 def get_pretrained_model(model_name: str):
@@ -11,7 +29,7 @@ def get_pretrained_model(model_name: str):
                                   pretrained=True,
                                   num_classes=0).eval()
     elif "MambaVision" in model_name:
-        model = AutoModel.from_pretrained(model_name, trust_remote_code=True).cuda().eval()
+        model = MambaVisionWrapper(model_name)
     return model
 
 
