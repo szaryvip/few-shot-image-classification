@@ -16,9 +16,9 @@ def get_model(type: ModelType, fe_extractor, fe_dim=768, fe_dtype=torch.float32,
     elif type == ModelType.PMF_FT:
         model = ProtoNet_Finetune(backbone=fe_extractor, **kwargs)
     elif type == ModelType.BASELINE_KMEANS:
-        model = BaselineKMeans(feature_extractor=fe_extractor)
+        model = BaselineKMeans(feature_extractor=fe_extractor, device=device)
     elif type == ModelType.BASELINE_KNN:
-        model = BaselineKNN(feature_extractor=fe_extractor)
+        model = BaselineKNN(feature_extractor=fe_extractor, device=device)
     else:
         raise ValueError(f"Model type {type} not recognized.")
     return model

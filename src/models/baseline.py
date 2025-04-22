@@ -7,14 +7,14 @@ from sklearn.neighbors import KNeighborsClassifier as KNN
 
 
 class Baseline(torch.nn.Module):
-    def __init__(self, feature_extractor, extractor_dim=224, extractor_channels=3):
+    def __init__(self, feature_extractor, device, extractor_dim=224, extractor_channels=3):
         super().__init__()
-        self.feature_extractor = feature_extractor
+        self.feature_extractor = feature_extractor.to(device)
         for p in self.feature_extractor.parameters():
             p.requires_grad = False
         self.grouping_model = None
 
-        dummy_input = torch.randn(1, extractor_channels, extractor_dim, extractor_dim).to("cuda")
+        dummy_input = torch.randn(1, extractor_channels, extractor_dim, extractor_dim).to(device)
         with torch.no_grad():
             dummy_feature_map = self.feature_extractor(dummy_input)
         self.fe_dim = dummy_feature_map.flatten(start_dim=1).shape[1]

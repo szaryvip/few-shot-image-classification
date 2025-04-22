@@ -11,7 +11,7 @@ from datasets.get_data_loader import get_data_loader
 from evaluate import eval_func
 from models.CAML import CAML
 from models.consts import ModelType
-from models.feature_extractor import get_pretrained_model, get_transform
+from models.feature_extractor import MambaVisionWrapper, get_pretrained_model, get_transform
 from models.get_model import get_model
 from scheduler import WarmupCosineDecayScheduler
 from train import train_epoch
@@ -115,6 +115,12 @@ def main():
     )
 
     parser.add_argument(
+        "--divide_datasets",
+        action="store_true",
+        help="Divide the dataset into train, validation, and test sets."
+    )
+
+    parser.add_argument(
         "--learning_rate",
         type=float,
         default=1e-5,
@@ -130,20 +136,28 @@ def main():
 
     print("Downloading and loading the feature extractor...")
     feature_extractor = get_pretrained_model(args.feature_extractor)
-    train_transform, test_transform = get_transform(
-        args.feature_extractor, True if Dataset(args.dataset) == Dataset.MINI_IMAGENET else False, model=feature_extractor.model)
+    if isinstance(feature_extractor, MambaVisionWrapper):
+        train_transform, test_transform = get_transform(
+            args.feature_extractor, True if Dataset(args.dataset) == Dataset.MINI_IMAGENET else False, model=feature_extractor.model)
+    else:
+        train_transform, test_transform = get_transform(
+            args.feature_extractor, True if Dataset(args.dataset) == Dataset.MINI_IMAGENET else False)
 
     print("Downloading and loading the dataset...")
-    if args.epochs > 0:
+    if args.epochs > 0 and args.divide_datasets:
         train = download_data(Dataset(args.dataset), DatasetType.TRAIN, transform=train_transform)
         valid = download_data(Dataset(args.dataset), DatasetType.VAL, transform=test_transform)
-    test = download_data(Dataset(args.dataset), DatasetType.TEST, transform=test_transform)
+        test = download_data(Dataset(args.dataset), DatasetType.TEST, transform=test_transform)
+    else:
+        test = download_data(Dataset(args.dataset), DatasetType.ALL, transform=test_transform)
 
     print("Preparing DataLoader...")
-    if args.epochs > 0:
+    if args.epochs > 0 and args.divide_datasets:
         train_loader = get_data_loader(train, args.way, args.shot, args.number_of_tasks, True)
         valid_loader = get_data_loader(valid, args.way, args.shot, args.number_of_tasks, False)
-    test_loader = get_data_loader(test, args.way, args.shot, args.number_of_tasks, False)
+        test_loader = get_data_loader(test, args.way, args.shot, args.number_of_tasks, False)
+    else:
+        test_loader = get_data_loader(test, args.way, args.shot, args.number_of_tasks, False)
 
     print("Preparing the model...")
     criterion = torch.nn.CrossEntropyLoss()

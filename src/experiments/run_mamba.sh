@@ -10,9 +10,13 @@ fe_dim=640
 for dataset in $(echo $DATASETS | sed "s/;/ /g")
 do
     echo "Dataset: $dataset"
-    if [ $1 = "CAML" ]; then
-        echo "CAML not supported for MambaVision"
-    else
-        python main.py --model=$1 --dataset=$dataset --feature_extractor=$fe --fe_dim=$fe_dim --use_wandb --epochs=0
-    fi
+    for way in $(echo $WAYS | sed "s/;/ /g")
+    do
+        echo "Way: $way"
+        if [ $1 = "CAML" ]; then
+            echo "CAML not supported for MambaVision"
+        else
+            python main.py --model=$1 --dataset=$dataset --feature_extractor=$fe --fe_dim=$fe_dim --use_wandb --epochs=0
+        fi
+    done
 done

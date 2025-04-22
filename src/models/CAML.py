@@ -8,6 +8,8 @@ import torch.nn as nn
 
 from models.TransformerEncoder import get_encoder
 
+# PROBLEM: 5 CLASSES HARDCODED
+
 
 class CAML(nn.Module):
 
