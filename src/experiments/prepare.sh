@@ -4,4 +4,5 @@ pip install -r ../requirements.txt
 
 export DATASETS="fc100;mini-imagenet;cub200;vggflower102;describable-textures"
 export WAYS="5;10;20;40;70;100"
-export DATASETS="vggflower102;"
+# export DATASETS="mini-imagenet;"
+# export WAYS="70;100;"

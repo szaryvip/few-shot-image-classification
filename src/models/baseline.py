@@ -26,7 +26,7 @@ class Baseline(torch.nn.Module):
         feature_vector = feature_map.view(batch_size, num_images, self.fe_dim)
         return feature_vector
 
-    def get_groups_and_features(self, support_set, support_labels, query_set, way):
+    def get_groups_and_features(self, support_set, support_labels, query_set, way, shots):
         raise NotImplementedError
 
     def calculate_accuracy(self, predicted_groups, true_labels):
@@ -34,7 +34,7 @@ class Baseline(torch.nn.Module):
 
 
 class BaselineKMeans(Baseline):
-    def get_groups_and_features(self, support_set, support_labels, query_set, way):
+    def get_groups_and_features(self, support_set, support_labels, query_set, way, shots):
         self.grouping_model = KMeans(n_clusters=way)
         support_features = self._get_feature_vector(support_set)
         query_features = self._get_feature_vector(query_set)
@@ -75,8 +75,8 @@ class BaselineKMeans(Baseline):
 
 
 class BaselineKNN(Baseline):
-    def get_groups_and_features(self, support_set, support_labels, query_set, way):
-        self.grouping_model = KNN(n_neighbors=way)
+    def get_groups_and_features(self, support_set, support_labels, query_set, way, shots):
+        self.grouping_model = KNN(n_neighbors=shots)
         support_features = self._get_feature_vector(support_set)
         query_features = self._get_feature_vector(query_set)
 

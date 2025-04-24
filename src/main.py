@@ -144,7 +144,7 @@ def main():
             args.feature_extractor, True if Dataset(args.dataset) == Dataset.MINI_IMAGENET else False)
 
     print("Downloading and loading the dataset...")
-    if args.epochs > 0 and args.divide_datasets:
+    if args.epochs > 0 or args.divide_datasets:
         train = download_data(Dataset(args.dataset), DatasetType.TRAIN, transform=train_transform)
         valid = download_data(Dataset(args.dataset), DatasetType.VAL, transform=test_transform)
         test = download_data(Dataset(args.dataset), DatasetType.TEST, transform=test_transform)
@@ -152,7 +152,7 @@ def main():
         test = download_data(Dataset(args.dataset), DatasetType.ALL, transform=test_transform)
 
     print("Preparing DataLoader...")
-    if args.epochs > 0 and args.divide_datasets:
+    if args.epochs > 0 or args.divide_datasets:
         train_loader = get_data_loader(train, args.way, args.shot, args.number_of_tasks, True)
         valid_loader = get_data_loader(valid, args.way, args.shot, args.number_of_tasks, False)
         test_loader = get_data_loader(test, args.way, args.shot, args.number_of_tasks, False)
