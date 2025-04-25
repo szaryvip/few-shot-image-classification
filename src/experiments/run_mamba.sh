@@ -16,7 +16,7 @@ do
         if [ $1 = "CAML" ]; then
             echo "CAML not supported for MambaVision"
         else
-            python main.py --model=$1 --dataset=$dataset --feature_extractor=$fe --fe_dim=$fe_dim --use_wandb --epochs=0
+            python main.py --model=$1 --dataset=$dataset --feature_extractor=$fe --fe_dim=$fe_dim --use_wandb --epochs=0 --way=$way
         fi
     done
 done
