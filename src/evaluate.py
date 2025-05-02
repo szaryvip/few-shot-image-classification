@@ -27,7 +27,6 @@ def eval_func(model, dataloader, criterion, device, way, shot):
                     suppX = suppX.squeeze(0)
                     queryX = queryX.squeeze(0)
                     suppY = suppY.squeeze(0)
-                    print("QueryY:", queryY)
                     unique_classes = suppY.unique()
                     classes = unique_classes.tolist()
                     assert len(classes) == way, "Support set class count must match `way`."
