@@ -27,57 +27,44 @@ def eval_func(model, dataloader, criterion, device, way, shot):
                     suppX = suppX.squeeze(0)
                     queryX = queryX.squeeze(0)
                     suppY = suppY.squeeze(0)
-
-                    batch_size = queryX.shape[0]
-
+                    print("QueryY:", queryY)
                     unique_classes = suppY.unique()
-                    class_indices = {cls.item(): (suppY == cls).nonzero(as_tuple=True)[0] for cls in unique_classes}
-                    query_class_indices = {cls.item(): (queryY == cls).nonzero(
-                        as_tuple=True)[0] for cls in unique_classes}
+                    classes = unique_classes.tolist()
+                    assert len(classes) == way, "Support set class count must match `way`."
 
-                    classes = list(class_indices.keys())
-                    assert len(classes) == way, "Support set classes and way mismatch!"
-
-                    group_size = 5
+                    group_size = 5  # Hardcoded CAML group size
                     num_groups = (way + group_size - 1) // group_size
 
+                    batch_size = queryX.shape[0]
                     class_logits = torch.full((batch_size, way), -1e9, device=device)
 
                     for group_idx in range(num_groups):
                         group_classes = classes[group_idx * group_size: (group_idx + 1) * group_size]
 
-                        # Handle small last group
                         padded_classes = group_classes.copy()
                         while len(padded_classes) < group_size:
                             padded_classes.append(padded_classes[-1])
 
-                        # Indices
-                        supp_idx = torch.cat([class_indices[c] for c in group_classes], dim=0)
-                        query_idx = torch.cat([query_class_indices[c] for c in group_classes], dim=0)
+                        supp_mask = torch.zeros_like(suppY, dtype=torch.bool)
+                        for cls in group_classes:
+                            supp_mask |= (suppY == cls)
+                        group_suppX = suppX[supp_mask]
+                        group_suppY = suppY[supp_mask]
 
-                        group_suppX = suppX[supp_idx]
-                        group_suppY = suppY[supp_idx]
-                        group_queryX = queryX[query_idx]
-                        group_queryY = queryY[query_idx]
-
-                        group_input = torch.cat([group_suppX, group_queryX], dim=0)
-
-                        # Remap labels
-                        remap_dict = {orig_class: new_idx for new_idx, orig_class in enumerate(group_classes)}
+                        # Remap support labels to [0, group_size)
+                        remap_dict = {cls: i for i, cls in enumerate(group_classes)}
                         group_suppY_remapped = group_suppY.clone()
-                        group_queryY_remapped = group_queryY.clone()
-
                         for orig, remapped in remap_dict.items():
                             group_suppY_remapped[group_suppY == orig] = remapped
-                            group_queryY_remapped[group_queryY == orig] = remapped
+
+                        group_input = torch.cat([group_suppX, queryX], dim=0)
 
                         logits = model(group_input, group_suppY_remapped, way=group_size, shot=shot)
 
-                        # Assign logits back to correct position
-                        for j, idx in enumerate(query_idx):
-                            for k, orig_class in enumerate(group_classes):
-                                class_position = classes.index(orig_class)
-                                class_logits[idx, class_position] = logits[j, k]
+                        for k, orig_class in enumerate(group_classes):
+                            if orig_class in remap_dict:
+                                class_idx = classes.index(orig_class)
+                                class_logits[:, class_idx] = logits[:, k]
 
                     loss = criterion(class_logits, queryY)
                     loss_value = loss.item()
